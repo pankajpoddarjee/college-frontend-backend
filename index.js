@@ -16,13 +16,28 @@ app.get('/colleges',async(req,res, next)=>{
         const skip = (page -1) * size;
 
         const total = await colleges.countDocuments();
-        const users = await colleges.find().skip(skip).limit(size);
+        const collegeData = await colleges.find().skip(skip).limit(size);
 
         res.json({
-            records: users,
+            records: collegeData,
             total,
             page, 
             size
+        });
+    } catch(error) {
+        console.log(error)
+        res.status(400).json(error)
+    }
+});
+
+app.get('/college/:id',async(req,res, next)=>{
+    const id = req.params.id;
+    try {
+       
+        const collegeData = await colleges.findOne({"_id": id});
+
+        res.json({
+            records: collegeData
         });
     } catch(error) {
         console.log(error)
